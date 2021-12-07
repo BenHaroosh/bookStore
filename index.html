@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Book Store</title>
+</head>
+
+<body onload="onInit()">
+    <h1>Welcome!</h1>
+
+    <input class="book-name" type="text" placeholder="Book's name?" />
+    <input class="book-price" type="text" placeholder="Book's price?" />
+    <button class="btn add-btn" onclick="onAdd()"> Add Book </button>
+    <select onchange="onSetSort(this.value)">
+        <option value="NAME">Name</option>
+        <option value="PRICE">Price</option>
+    </select>
+    <table style="border-collapse: collapse;">
+        <thead>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Picture</th>
+            <th>Price</th>
+            <th colspan="3">Actions</th>
+        </thead>
+        <tbody class="container">
+
+        </tbody>
+    </table>
+    <div class="pages">
+        <button class="move-page-btn" onclick="onPrevious()">PREVIOUS PAGE</button>
+        <div class="page-container"></div>
+        <button class="move-page-btn" onclick="onNextPage()">NEXT PAGE </button>
+    </div>
+
+
+    <div class="modal">
+        <h3></h3>
+        <h4>Book Price <span></span>$ </h4>
+        <h5>Book's Description</h5>
+        <p></p>
+        <button class="modal-btn" onclick="onCloseModal()">Close</button> </br>
+        <div>
+            <button onclick="onRemoveRate()" class="modal-add-remove">-</button>
+            <span class="rate-span">0</span>
+            <button onclick="onAddRate()" class="modal-add-remove">+</button>
+        </div>
+
+    </div>
+
+    <script src="js/service.js"></script>
+    <script src="js/controller.js"></script>
+</body>
+
+</html>
