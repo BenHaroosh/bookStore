@@ -72,7 +72,6 @@ function _saveBooksToStorage() {
     saveToStorage('booksDB', gBooks)
 }
 
-//lol
 
 function getBooks() {
     return gBooks
