@@ -16,24 +16,30 @@ function renderBoard() {
         <td> ${book.name} </td>
         <td> ${book.imgUrl} </td>
         <td> ${book.price}$ </td>
-        <td> <button class="btn" onclick= "onRemove('${book.id}')"> Delete </button> </td>
-        <td> <button class="btn" onclick= "onRead('${book.id}')"> Read </button> </td>
-        <td> <button class="btn" onclick= "onUpdate('${book.id}')"> Update </button> </td>
+        <td> <button data-trans="delete-btn" class="btn" onclick= "onRemove('${book.id}')"> Delete </button> </td>
+        <td> <button data-trans="read-btn" class="btn" onclick= "onRead('${book.id}')"> Read </button> </td>
+        <td> <button data-trans="update-btn" class="btn" onclick= "onUpdate('${book.id}')"> Update </button> </td>
         </tr>
         `
     })
     document.querySelector('.container').innerHTML = strHtmls.join('')
+    getLangForDisplay()
+    renderPages()
 
-    // const pageAmount = getPageAmount()
-    // const pageStrHtml = ''
-    // var count = 1
 
-    // for (var i = 0; i < pageAmount; i++) {
-    //     pageStrHtml += `<button> ${count++} </button>`
-    //     console.log(pageStrHtml);
-    // }
+}
 
-    // document.querySelector('.page-container').innerHTML = pageStrHtml
+function renderPages(){
+    const pageAmount = getPageAmount()
+    console.log(pageAmount);
+    var pageStrHtml = ''
+    var count = 1
+
+    for (var i = 0; i < pageAmount; i++) {
+        pageStrHtml += `<button onclick="onMovePage('${count}')"> ${count++} </button>`
+    }
+
+    document.querySelector('.page-container').innerHTML = pageStrHtml
 
 }
 
@@ -62,17 +68,39 @@ function onAdd() {
 }
 
 function onUpdate(bookId) {
-    const newPrice = +prompt('New Book Price?')
-    if (!newPrice || newPrice < 0) return
 
+    const strHtml = `
+    <h4 data-trans="mHeader">What is the New Price?</h4>
+    <button class="close-btn" onclick="onClose()">x</button>
+    <input data-trans="new-price" class="new-price" type="text" placeholder="New Price?" />
+    <button data-trans="update-btn" class="update-btn" onclick="onUpdateBook('${bookId}')">Update</button>
+`
+
+    var elModal = document.querySelector('.modal-update')
+    elModal.innerHTML = strHtml
+    if (elModal.classList.contains('unseen')) elModal.classList.remove('unseen')
+    renderBoard()
+}
+
+function onClose() {
+    var elModal = document.querySelector('.modal-update')
+    elModal.classList.add('unseen')
+}
+
+function onUpdateBook(bookId) {
+    onClose()
+    if (!newPrice || newPrice < 0) return
+    const el = document.querySelector('.new-price')
+    const newPrice = el.value
     updateBook(bookId, newPrice)
+    el.value = ''
     renderBoard()
 }
 
 function onRead(bookId) {
     var elModal = document.querySelector('.modal')
     var elModalH3 = elModal.querySelector('h3')
-    var elModalSpan = elModal.querySelector('span')
+    var elModalSpan = elModal.querySelector('.num')
     var elModalRateSpan = elModal.querySelector('.rate-span')
     var elModalP = elModal.querySelector('p')
 
@@ -116,5 +144,25 @@ function onNextPage() {
 
 function onPrevious() {
     movePage(false)
+    renderBoard()
+}
+
+function onSetLang(setLangBy) {
+
+    if (setLangBy === 'he') {
+        document.body.classList.add('rtl')
+    }
+    else {
+        document.body.classList.remove('rtl')
+    }
+
+    setLang(setLangBy)
+    renderBoard()
+}
+
+function onMovePage(pageNum) {
+    const pageIdx = pageNum - 1
+    console.log(pageIdx);
+    movePageTo(pageIdx)
     renderBoard()
 }

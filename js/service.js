@@ -25,6 +25,10 @@ function movePage(whichPage) {
     }
 }
 
+function movePageTo(pageIdx) {
+    gPageIdx = pageIdx
+}
+
 
 function _createBook(name, imgUrl) {
     return {
@@ -76,7 +80,9 @@ function removeBook(bookId) {
     const bookIdx = gBooks.findIndex(function (book) {
         return book.id === bookId
     })
+
     gBooks.splice(bookIdx, 1)
+    if (gBooks.length % PAGE_SIZE === 0 && gPageIdx !== 0) gPageIdx--
     _saveBooksToStorage()
 }
 
@@ -144,16 +150,20 @@ function getBooksForDisplay() {
         })
     }
 
+
+    console.log(gPageIdx);
+
     const startIdx = gPageIdx * PAGE_SIZE
     const books = gBooks.slice(startIdx, startIdx + PAGE_SIZE)
+    console.log('books', books);
     return books;
 
 }
 
-// function getPageAmount() {
-//     return Math.ceil(gBooks / PAGE_SIZE)
+function getPageAmount() {
+    return Math.ceil(gBooks.length / PAGE_SIZE)
 
-// }
+}
 
 
 function saveToStorage(key, val) {
